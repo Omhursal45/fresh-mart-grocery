@@ -1,0 +1,153 @@
+
+        :root {
+            --zepto-purple: #3c006b;
+            --zepto-pink: #ff3269;
+            --zepto-light-pink: #fff5f8;
+            --text-main: #1c1c1c;
+            --nav-height: 72px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-main);
+            margin: 0;
+            padding-top: var(--nav-height); /* Prevent content jump under sticky nav */
+        }
+
+        /* --- Navbar Perfection --- */
+        .zepto-nav {
+            background: #ffffff;
+            height: var(--nav-height);
+            border-bottom: 1px solid #f1f1f1;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            transition: transform 0.2s;
+        }
+        .navbar-brand:hover img { transform: scale(1.05); }
+
+        /* --- Location UX --- */
+        .location-widget {
+            line-height: 1.2;
+            padding: 4px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            max-width: 200px;
+        }
+        .location-widget:hover { background: var(--zepto-light-pink); }
+        .loc-title { 
+            font-size: 11px; 
+            font-weight: 800; 
+            color: var(--zepto-pink); 
+            text-transform: uppercase;
+        }
+        .loc-name { 
+            font-size: 14px; 
+            font-weight: 700; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* --- Search Bar Perfection --- */
+        .search-wrapper {
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 0 16px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 600px;
+            margin: 0 40px;
+            border: 1px solid transparent;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .search-wrapper:focus-within {
+            background: #fff;
+            border-color: var(--zepto-pink);
+            box-shadow: 0 0 0 4px rgba(255, 50, 105, 0.08);
+        }
+        .search-wrapper input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+        }
+
+        /* --- Action Icons --- */
+        .nav-link-custom {
+            text-decoration: none !important;
+            color: #444;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .nav-link-custom:hover { color: var(--zepto-pink); }
+        .nav-link-custom i { font-size: 22px; }
+
+        /* --- Cart Button --- */
+        .cart-pill {
+            background: var(--zepto-pink);
+            color: #fff !important;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(255, 50, 105, 0.2);
+        }
+        .cart-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 50, 105, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* --- Footer --- */
+        .f-main {
+            background: #fff;
+            border-top: 1px solid #eee;
+            padding: 80px 0 40px;
+            margin-top: 60px;
+        }
+        .f-header { font-weight: 800; font-size: 14px; margin-bottom: 20px; color: #111; }
+        .f-link { 
+            color: #666; 
+            text-decoration: none; 
+            font-size: 14px; 
+            margin-bottom: 12px; 
+            display: block;
+            transition: 0.2s;
+        }
+        .f-link:hover { color: var(--zepto-pink); padding-left: 5px; }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 992px) {
+            .search-wrapper { margin: 0 15px; }
+            .loc-name { font-size: 12px; }
+        }
+
+        @media (max-width: 768px) {
+            :root { --nav-height: 64px; }
+            .search-wrapper { display: none; } /* Hidden on mobile nav, usually handled by a separate search icon or sticky bar */
+            .navbar-brand img { height: 30px; }
+            .cart-text { display: none; }
+            .cart-pill { padding: 10px 15px; }
+        }
