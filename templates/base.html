@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}Fresh Mart | 10-Minute Delivery{% endblock %}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --zepto-purple: #3c006b;
+            --zepto-pink: #ff3269;
+            --zepto-light-pink: #fff5f8;
+            --text-main: #1c1c1c;
+            --nav-height: 72px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-main);
+            margin: 0;
+            padding-top: var(--nav-height); /* Prevent content jump under sticky nav */
+        }
+
+        /* --- Navbar Perfection --- */
+        .zepto-nav {
+            background: #ffffff;
+            height: var(--nav-height);
+            border-bottom: 1px solid #f1f1f1;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            transition: transform 0.2s;
+        }
+        .navbar-brand:hover img { transform: scale(1.05); }
+
+        /* --- Location UX --- */
+        .location-widget {
+            line-height: 1.2;
+            padding: 4px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            max-width: 200px;
+        }
+        .location-widget:hover { background: var(--zepto-light-pink); }
+        .loc-title { 
+            font-size: 11px; 
+            font-weight: 800; 
+            color: var(--zepto-pink); 
+            text-transform: uppercase;
+        }
+        .loc-name { 
+            font-size: 14px; 
+            font-weight: 700; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* --- Search Bar Perfection --- */
+        .search-wrapper {
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 0 16px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 600px;
+            margin: 0 40px;
+            border: 1px solid transparent;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .search-wrapper:focus-within {
+            background: #fff;
+            border-color: var(--zepto-pink);
+            box-shadow: 0 0 0 4px rgba(255, 50, 105, 0.08);
+        }
+        .search-wrapper input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+        }
+
+        /* --- Action Icons --- */
+        .nav-link-custom {
+            text-decoration: none !important;
+            color: #444;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .nav-link-custom:hover { color: var(--zepto-pink); }
+        .nav-link-custom i { font-size: 22px; }
+
+        /* --- Cart Button --- */
+        .cart-pill {
+            background: var(--zepto-pink);
+            color: #fff !important;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(255, 50, 105, 0.2);
+        }
+        .cart-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 50, 105, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* --- Footer --- */
+        .f-main {
+            background: #fff;
+            border-top: 1px solid #eee;
+            padding: 80px 0 40px;
+            margin-top: 60px;
+        }
+        .f-header { font-weight: 800; font-size: 14px; margin-bottom: 20px; color: #111; }
+        .f-link { 
+            color: #666; 
+            text-decoration: none; 
+            font-size: 14px; 
+            margin-bottom: 12px; 
+            display: block;
+            transition: 0.2s;
+        }
+        .f-link:hover { color: var(--zepto-pink); padding-left: 5px; }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 992px) {
+            .search-wrapper { margin: 0 15px; }
+            .loc-name { font-size: 12px; }
+        }
+
+        @media (max-width: 768px) {
+            :root { --nav-height: 64px; }
+            .search-wrapper { display: none; } /* Hidden on mobile nav, usually handled by a separate search icon or sticky bar */
+            .navbar-brand img { height: 30px; }
+            .cart-text { display: none; }
+            .cart-pill { padding: 10px 15px; }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <nav class="zepto-nav">
+        <div class="container d-flex align-items-center">
+            
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand me-3" href="/">
+                    <img src="/media/products/freshMart1.png" alt="Fresh Mart">
+                </a>
+                
+                <div class="location-widget d-none d-md-block">
+                    <div class="loc-title">Delivery in 10 Mins</div>
+                    <div class="loc-name">Hyderabad, Telangana <i class="bi bi-chevron-down ms-1" style="font-size: 10px;"></i></div>
+                </div>
+            </div>
+
+            <div class="search-wrapper d-none d-md-flex">
+                <i class="bi bi-search text-muted"></i>
+                <form action="{% url 'product_list' %}" method="get" class="w-100">
+                    <input type="text" name="q" placeholder='Search for "atta", "dal" or "coke"...' autocomplete="off">
+                </form>
+            </div>
+
+            <div class="ms-auto d-flex align-items-center gap-3 gap-lg-4">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a href="#" class="nav-link-custom dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i>
+                            <span class="d-none d-lg-inline">Account</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-3 p-2" style="border-radius: 15px;">
+                            <li><a class="dropdown-item rounded-3 py-2" href="/profile"><i class="bi bi-person me-2"></i> My Profile</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="/orders"><i class="bi bi-clock-history me-2"></i> Orders</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" class="m-0">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item rounded-3 py-2 text-danger fw-bold border-0 bg-transparent w-100 text-start">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a href="/login" class="nav-link-custom">
+                        <i class="bi bi-person"></i>
+                        <span>Login</span>
+                    </a>
+                {% endif %}
+
+                <a href="/cart" class="cart-pill text-decoration-none">
+                    <i class="bi bi-cart3 fs-5"></i>
+                    <span class="cart-text">My Cart</span>
+                    <span class="badge bg-white text-dark rounded-pill" id="cart-count">{{ cart_count|default:"0" }}</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="f-main">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-12">
+                    <img src="/media/products/freshMart1.png" height="35" class="mb-4" alt="Fresh Mart">
+                    <p class="text-muted small pe-lg-5" style="line-height: 1.8;">
+                        Fresh Mart is your go-to solution for lightning-fast grocery deliveries. 
+                        We bring the freshest produce and your daily essentials to your doorstep 
+                        in under 10 minutes.
+                    </p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="text-dark fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-dark fs-5"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-dark fs-5"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-6">
+                    <div class="f-header">Quick Links</div>
+                    <a href="#" class="f-link">Home</a>
+                    <a href="#" class="f-link">Categories</a>
+                    <a href="#" class="f-link">Offers</a>
+                    <a href="#" class="f-link">Contact Us</a>
+                </div>
+
+                <div class="col-lg-2 col-6">
+                    <div class="f-header">Support</div>
+                    <a href="#" class="f-link">Help Center</a>
+                    <a href="#" class="f-link">Privacy Policy</a>
+                    <a href="#" class="f-link">Terms of Service</a>
+                    <a href="#" class="f-link">Refund Policy</a>
+                </div>
+
+                <div class="col-lg-4 col-md-12">
+                    <div class="f-header">Experience Fresh Mart App</div>
+                    <div class="d-grid gap-2 d-sm-flex">
+                        <button class="btn btn-dark btn-lg px-4 py-2 rounded-3" style="font-size: 14px;">
+                            <i class="bi bi-apple me-2"></i> App Store
+                        </button>
+                        <button class="btn btn-dark btn-lg px-4 py-2 rounded-3" style="font-size: 14px;">
+                            <i class="bi bi-play-fill me-2"></i> Google Play
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-5 opacity-50">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="text-muted small mb-0">&copy; 2025 Fresh Mart. Handcrafted for a better grocery experience.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" height="20" class="me-3 opacity-50" alt="Payment">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" height="15" class="opacity-50" alt="Payment">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Smooth shadow transition on scroll
+        window.onscroll = function() {
+            const nav = document.querySelector('.zepto-nav');
+            if (window.pageYOffset > 30) {
+                nav.style.boxShadow = "0 10px 30px rgba(0,0,0,0.08)";
+                nav.style.borderBottomColor = "transparent";
+            } else {
+                nav.style.boxShadow = "none";
+                nav.style.borderBottomColor = "#f1f1f1";
+            }
+        };
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
