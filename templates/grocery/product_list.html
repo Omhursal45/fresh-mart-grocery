@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}{% if current_category %}{{ current_category.name }}{% else %}Shop All{% endif %} | Fresh Mart{% endblock %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'grocery/css/product_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5">
+    
+    <div class="mobile-cats mb-3">
+        <a href="{% url 'product_list' %}" class="cat-chip {% if not current_category %}active{% endif %}">All</a>
+        {% for category in categories %}
+        <a href="{% url 'product_list' %}?category={{ category.slug }}" class="cat-chip {% if current_category.slug == category.slug %}active{% endif %}">
+            {{ category.name }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-xl-2 d-none d-lg-block">
+            <div class="sidebar-sticky">
+                <h6 class="fw-bold mb-4 px-3">Categories</h6>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'product_list' %}" 
+                       class="list-group-item list-group-item-action rounded-3 mb-1 {% if not current_category %}sidebar-active{% endif %}">
+                        <i class="bi bi-grid"></i> All Products
+                    </a>
+                    {% for category in categories %}
+                    <a href="{% url 'product_list' %}?category={{ category.slug }}" 
+                       class="list-group-item list-group-item-action rounded-3 mb-1 {% if current_category.slug == category.slug %}sidebar-active{% endif %}">
+                        <i class="bi bi-chevron-right small"></i> {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-xl-10">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb bg-transparent p-0 small">
+                    <li class="breadcrumb-item"><a href="/" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active fw-bold text-dark">{{ current_category.name|default:"All Products" }}</li>
+                </ol>
+            </nav>
+
+            <div class="rounded-4 p-4 mb-5 d-flex align-items-center justify-content-between" 
+                 style="background: linear-gradient(90deg, #3c006b 0%, #6b21a8 100%); color: white;">
+                <div>
+                    <span class="badge bg-warning text-dark mb-2">LIMITED OFFER</span>
+                    <h2 class="fw-extrabold mb-1">{{ current_category.name|default:"Fresh Grocery" }}</h2>
+                    <p class="mb-0 opacity-75">Get the best prices on daily essentials</p>
+                </div>
+                <div class="d-none d-md-block">
+                    <i class="bi bi-truck fs-1 opacity-25"></i>
+                </div>
+            </div>
+
+            <div class="row g-3 g-lg-4">
+                {% for product in products %}
+                <div class="col-6 col-md-4 col-lg-3 col-xxl-2">
+                    <div class="card h-100 product-card p-2">
+                        <div class="img-wrapper mb-2">
+                            {% if product.old_price %}
+                                <div class="save-badge">SAVE ₹{{ product.old_price|add:product.price }}</div>
+                            {% endif %}
+                            
+                            <a href="{% url 'product_detail' slug=product.slug %}">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="img-fluid" style="max-height: 120px;" alt="{{ product.name }}">
+                                {% endif %}
+                            </a>
+
+                            <button class="btn btn-outline-danger btn-sm position-absolute bottom-0 end-0 m-2 bg-white px-3 fw-bold add-to-cart-btn" 
+                                    data-product-id="{{ product.id }}">
+                                ADD
+                            </button>
+                        </div>
+                        
+                        <div class="px-1">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="fw-bold text-dark">₹{{ product.price }}</span>
+                                {% if product.old_price %}
+                                <span class="text-muted text-decoration-line-through small">₹{{ product.old_price }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <a href="{% url 'product_detail' slug=product.slug %}" class="text-decoration-none text-dark">
+                                <h6 class="mb-0 text-truncate fw-bold" style="font-size: 14px;">{{ product.name }}</h6>
+                            </a>
+                            
+                            <p class="text-muted extra-small mb-0" style="font-size: 12px;">{{ product.weight|default:"500 g" }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+                    <h5 class="text-muted">No products found here.</h5>
+                    <a href="{% url 'product_list' %}" class="btn btn-primary mt-3">Browse All Products</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'grocery/js/product_list.js' %}"></script>
+{% endblock %}

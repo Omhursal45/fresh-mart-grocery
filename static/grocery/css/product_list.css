@@ -1,0 +1,110 @@
+
+    :root {
+        --active-purple: #f8efff;
+        --active-text: #3c006b;
+    }
+    body { background-color: #fcfcfc; }
+    
+    /* Sidebar Improvements */
+    .sidebar-sticky {
+        position: sticky;
+        top: 90px;
+        height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+    .list-group-item-action {
+        border: none !important;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .sidebar-active { 
+        background-color: var(--active-purple) !important; 
+        color: var(--active-text) !important; 
+        font-weight: 700; 
+    }
+    .list-group-item-action:hover:not(.sidebar-active) {
+        background-color: #f8f9fa;
+        color: var(--zepto-pink);
+    }
+
+    /* Mobile Category Scroller */
+    .mobile-cats {
+        display: none;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .mobile-cats::-webkit-scrollbar { display: none; }
+    .cat-chip {
+        display: inline-block;
+        padding: 8px 20px;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 50px;
+        margin-right: 8px;
+        text-decoration: none;
+        color: #444;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .cat-chip.active {
+        background: var(--zepto-pink);
+        color: #fff;
+        border-color: var(--zepto-pink);
+    }
+
+    /* Product Card Polish */
+    .product-card { 
+        border: 1px solid #f0f0f0 !important; 
+        border-radius: 16px; 
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        background: #fff;
+    }
+    .product-card:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 12px 24px rgba(0,0,0,0.08) !important; 
+        border-color: #eb1e58 !important;
+    }
+    
+    .img-wrapper {
+        background: #f9f9f9;
+        border-radius: 12px;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .save-badge {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--zepto-pink);
+        color: white;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 4px 8px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .add-to-cart-btn {
+        transition: 0.2s;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+    }
+    .add-to-cart-btn:hover{
+        background-color: #eb1e58;
+
+    }
+
+    @media (max-width: 991px) {
+        .mobile-cats { display: flex; }
+    }
