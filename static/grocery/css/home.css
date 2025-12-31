@@ -1,0 +1,181 @@
+
+    :root {
+        --zepto-pink: #ff3269;
+        --zepto-purple: #3c006b;
+        --soft-bg: #f8f9fa;
+        --squircle-radius: 20px;
+    }
+
+    body { background-color: var(--soft-bg); }
+
+    /* --- 1. CATEGORY SCROLLER (FIXED) --- */
+    .category-outer-container {
+        background: #fff;
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .category-scroll-wrapper {
+        display: flex;
+        overflow-x: auto;
+        gap: 20px;
+        padding: 5px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .category-scroll-wrapper::-webkit-scrollbar { display: none; }
+    
+    .category-node {
+        flex: 0 0 auto;
+        width: 90px;
+        text-align: center;
+        text-decoration: none;
+        color: #111;
+        transition: transform 0.2s ease;
+    }
+    .category-node:hover { transform: translateY(-4px); }
+    
+    .category-circle {
+        width: 80px;
+        height: 80px;
+        background: #f8f8f8; /* Light gray background for better contrast */
+        border-radius: var(--squircle-radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px;
+        border: 1px solid #f0f0f0;
+        padding: 0;           /* FIXED: Removed padding to allow image to fill the box */
+        overflow: hidden;    /* FIXED: Clips the image to the border-radius */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    }
+    
+    .category-circle img { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover;    /* FIXED: 'cover' fills the entire square */
+        transition: transform 0.3s ease;
+    }
+
+    /* Added a small hover zoom effect for the image */
+    .category-node:hover .category-circle img {
+        transform: scale(1.1);
+    }
+
+    .category-text { 
+        font-size: 12px; 
+        font-weight: 700; 
+        line-height: 1.2; 
+        display: block; 
+        color: #2d2d2d;
+    }
+
+    /* --- 2. PROMO CARDS --- */
+    .promo-card-v2 {
+        border-radius: 24px;
+        padding: 40px;
+        height: 280px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transition: 0.3s;
+    }
+    .primary-gradient {
+        background: linear-gradient(135deg, var(--zepto-pink), #ff5f6d);
+        color: white;
+    }
+    .secondary-soft {
+        background: #efe4ff;
+        color: var(--zepto-purple);
+    }
+    .zero-badge {
+        background: #1fa750;
+        padding: 2px 12px;
+        border-radius: 8px;
+        font-weight: 800;
+        margin: 0 5px;
+    }
+    .btn-shop-now {
+        background: #111;
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        width: fit-content;
+        margin-top: 20px;
+        transition: 0.2s;
+    }
+    .btn-shop-now:hover { background: #333; color: #fff; transform: scale(1.05); }
+    
+    .promo-float-img {
+        position: absolute;
+        right: 20px;
+        bottom: -20px;
+        height: 200px;
+        filter: drop-shadow(0 15px 20px rgba(0,0,0,0.15));
+    }
+
+    /* --- 3. PRODUCT CARDS --- */
+    .product-card-v2 {
+        border-radius: 18px;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid #eee !important;
+        overflow: hidden;
+    }
+    .product-card-v2:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+        border-color: var(--zepto-pink) !important;
+    }
+    .img-box {
+        height: 150px;
+        padding: 20px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .img-box img { max-height: 100%; object-fit: contain; }
+    
+    .product-title-v2 {
+        font-size: 14px;
+        font-weight: 700;
+        height: 40px;
+        overflow: hidden;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+    .price-tag { font-weight: 800; font-size: 17px; color: #000; }
+    
+    .btn-add-v2 {
+        border: 1px solid var(--zepto-pink);
+        background: #fff;
+        color: var(--zepto-pink);
+        font-weight: 800;
+        padding: 5px 16px;
+        border-radius: 10px;
+        transition: 0.2s;
+    }
+    .btn-add-v2:hover { background: var(--zepto-pink); color: #fff; }
+
+    .eta-label {
+        position: absolute;
+        top: 12px; left: 12px;
+        background: rgba(255,255,255,0.95);
+        font-size: 10px;
+        font-weight: 900;
+        padding: 3px 8px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        z-index: 2;
+        color: #111;
+    }
+
+    @media (max-width: 768px) {
+        .promo-card-v2 { padding: 25px; height: auto; min-height: 220px; }
+        .promo-float-img { height: 130px; }
+        .display-6 { font-size: 1.8rem; }
+    }
