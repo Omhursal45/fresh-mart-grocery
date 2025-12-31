@@ -1,14 +1,18 @@
+{% csrf_token %}
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>{% block title %}Fresh Mart | 10-Minute Delivery{% endblock %}</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
 
     <link rel="stylesheet" href="{% static 'grocery/css/base.css' %}">
     {% block extra_css %}{% endblock %}
@@ -29,12 +33,17 @@
                 </div>
             </div>
 
-            <div class="search-wrapper d-none d-md-flex">
+            <div class="search-wrapper d-flex position-relative flex-grow-1 mx-2 mx-md-4">
                 <i class="bi bi-search text-muted"></i>
-                <form action="{% url 'product_list' %}" method="get" class="w-100">
-                    <input type="text" name="q" placeholder='Search for "atta", "dal" or "coke"...' autocomplete="off">
+                <form action="{% url 'product_list' %}" method="get" class="w-100" id="search-form">
+                    <input type="text" id="search-input" name="q" placeholder='Search for "atta", "dal" or "coke"...' autocomplete="off">
                 </form>
-            </div>
+    
+                <div id="suggestions-box" class="position-absolute bg-white w-100 shadow-lg d-none" style="top: 100%; left:0; z-index: 9999; border: 1px solid #ddd; border-radius: 8px;">
+                    <ul class="list-group list-group-flush" id="suggestions-list">
+                        </ul>
+                </div>
+            </div>          
 
             <div class="ms-auto d-flex align-items-center gap-3 gap-lg-4">
                 {% if user.is_authenticated %}
@@ -137,6 +146,7 @@
         </div>
     </footer>
 
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'grocery/js/base.js' %}"></script>
     {% block extra_js %}{% endblock %}

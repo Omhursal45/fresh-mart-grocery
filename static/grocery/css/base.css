@@ -12,10 +12,9 @@
             background-color: #f8f9fa;
             color: var(--text-main);
             margin: 0;
-            padding-top: var(--nav-height); /* Prevent content jump under sticky nav */
+            padding-top: var(--nav-height); 
         }
 
-        /* --- Navbar Perfection --- */
         .zepto-nav {
             background: #ffffff;
             height: var(--nav-height);
@@ -34,7 +33,6 @@
         }
         .navbar-brand:hover img { transform: scale(1.05); }
 
-        /* --- Location UX --- */
         .location-widget {
             line-height: 1.2;
             padding: 4px 12px;
@@ -57,8 +55,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        /* --- Search Bar Perfection --- */
         .search-wrapper {
             background: #f3f4f6;
             border-radius: 12px;
@@ -87,7 +83,6 @@
             outline: none;
         }
 
-        /* --- Action Icons --- */
         .nav-link-custom {
             text-decoration: none !important;
             color: #444;
@@ -101,7 +96,6 @@
         .nav-link-custom:hover { color: var(--zepto-pink); }
         .nav-link-custom i { font-size: 22px; }
 
-        /* --- Cart Button --- */
         .cart-pill {
             background: var(--zepto-pink);
             color: #fff !important;
@@ -119,8 +113,6 @@
             box-shadow: 0 6px 15px rgba(255, 50, 105, 0.3);
             filter: brightness(1.1);
         }
-
-        /* --- Footer --- */
         .f-main {
             background: #fff;
             border-top: 1px solid #eee;
@@ -138,7 +130,6 @@
         }
         .f-link:hover { color: var(--zepto-pink); padding-left: 5px; }
 
-        /* --- Mobile Responsiveness --- */
         @media (max-width: 992px) {
             .search-wrapper { margin: 0 15px; }
             .loc-name { font-size: 12px; }
@@ -146,7 +137,7 @@
 
         @media (max-width: 768px) {
             :root { --nav-height: 64px; }
-            .search-wrapper { display: none; } /* Hidden on mobile nav, usually handled by a separate search icon or sticky bar */
+            .search-wrapper { display: none; }
             .navbar-brand img { height: 30px; }
             .cart-text { display: none; }
             .cart-pill { padding: 10px 15px; }
