@@ -1,6 +1,8 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from ..models import Product, Category, CartItem
+from django.http import JsonResponse
+from ..models import Product 
 
 
 class HomeView(ListView):
@@ -95,3 +97,14 @@ class ProductDetailView(DetailView):
         else:
             context['cart_quantity'] = 0
         return context
+    
+
+def search_suggestions(request):
+    query = request.GET.get('q', '')
+    suggestions = []
+    if len(query) > 1:
+        # Fetch top 5 matching products
+        results = Product.objects.filter(name__icontains=query)[:5]
+        suggestions = [{'id': p.id, 'name': p.name} for p in results]
+    
+    return JsonResponse({'suggestions': suggestions})

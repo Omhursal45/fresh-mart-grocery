@@ -1,0 +1,138 @@
+
+    :root {
+        --primary-green: #0c831f;
+        --soft-bg: #f4f6fb;
+        --border-color: #eeeeee;
+    }
+
+    body { background-color: #fff; font-family: 'Inter', sans-serif; }
+
+    /* ===== BREADCRUMBS ===== */
+    .breadcrumb { font-size: 0.8rem; background: transparent; }
+    .breadcrumb-item a { color: #828282; text-decoration: none; }
+    .breadcrumb-item.active { color: #212529; font-weight: 600; }
+
+    /* ===== PRODUCT VISUALS ===== */
+    .product-gallery {
+        position: sticky;
+        top: 100px;
+    }
+    .main-img-container {
+        background: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+    .main-img-container img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .main-img-container:hover img { transform: scale(1.1); }
+
+    .wishlist-btn-circle {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        cursor: pointer;
+        z-index: 10;
+        border: none;
+        transition: 0.2s;
+    }
+    .wishlist-btn-circle:hover { background: #fff5f5; color: #ff4d4f; }
+
+    /* ===== PRODUCT INFO ===== */
+    .category-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--primary-green);
+        font-weight: 700;
+        margin-bottom: 8px;
+        display: block;
+    }
+    .product-title { font-weight: 800; font-size: 2.2rem; color: #1f1f1f; }
+    .price-large { font-size: 2.5rem; font-weight: 800; color: #212529; }
+    .strike-price { font-size: 1.2rem; color: #828282; text-decoration: line-through; }
+    
+    /* ===== INTERACTION ELEMENTS ===== */
+    .qty-selector {
+        background: var(--primary-green);
+        color: white;
+        border-radius: 8px;
+        padding: 10px 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+        font-weight: 700;
+    }
+    .qty-selector button {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+    }
+    
+    .weight-chip-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .weight-chip {
+        border: 1px solid #ddd;
+        padding: 8px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+    .weight-chip.active {
+        border-color: var(--primary-green);
+        background: #f0fff4;
+        color: var(--primary-green);
+    }
+
+    /* ===== TRUST BADGES ===== */
+    .trust-badge-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 30px;
+    }
+    .trust-card {
+        padding: 12px;
+        border-radius: 12px;
+        background: var(--soft-bg);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .trust-card i { font-size: 1.2rem; color: var(--primary-green); }
+    .trust-card span { font-size: 0.8rem; font-weight: 600; }
+
+    /* ===== MOBILE FLOATING BAR ===== */
+    @media (max-width: 768px) {
+        .mobile-add-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }

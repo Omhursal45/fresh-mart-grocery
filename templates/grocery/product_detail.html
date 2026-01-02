@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} | Fresh Mart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'grocery/css/product_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Shop</a></li>
+            <li class="breadcrumb-item active">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-lg-5">
+        <div class="col-lg-6">
+            <div class="product-gallery">
+                <div class="main-img-container shadow-sm">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" id="mainProductImg" alt="{{ product.name }}">
+                    {% else %}
+                        <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+                    {% endif %}
+                    
+                    <button class="wishlist-btn-circle" onclick="addToWishlist({{ product.id }})">
+                        <i class="bi bi-heart"></i>
+                    </button>
+
+                    {% if not product.in_stock %}
+                    <div class="position-absolute bg-dark text-white px-4 py-2 rounded-pill fw-bold" style="opacity: 0.9;">
+                        Out of Stock
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="trust-badge-container d-none d-lg-grid">
+                    <div class="trust-card">
+                        <i class="bi bi-lightning-fill"></i>
+                        <span>10 Min Delivery</span>
+                    </div>
+                    <div class="trust-card">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Best Quality Assured</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mt-4 mt-lg-0">
+            <span class="category-label">{{ product.category.name }}</span>
+            <h1 class="product-title">{{ product.name }}</h1>
+            
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="badge bg-success d-flex align-items-center gap-1 px-2 py-1">
+                    <i class="bi bi-star-fill" style="font-size: 0.7rem;"></i> {{ product.rating|default:"4.5" }}
+                </div>
+                <span class="text-muted small fw-600">{{ product.review_count|default:"120" }} Ratings & Reviews</span>
+            </div>
+
+            <div class="price-section mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="price-large">₹<span id="displayPrice">{{ product.price }}</span></span>
+                    {% if product.old_price %}
+                    <span class="strike-price">₹{{ product.old_price }}</span>
+                    <span class="badge bg-primary rounded-pill">SAVE {{ product.discount }}%</span>
+                    {% endif %}
+                </div>
+                <p class="text-muted small mt-1">(Inclusive of all taxes)</p>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="mb-5">
+                {% if product.is_weight_based %}
+                    <h6 class="fw-bold mb-3">Select Quantity</h6>
+                    <div class="weight-chip-group" id="weightPicker">
+                        <div class="weight-chip" data-val="0.25">250 g</div>
+                        <div class="weight-chip" data-val="0.5">500 g</div>
+                        <div class="weight-chip active" data-val="1">1 kg</div>
+                        <div class="weight-chip" data-val="2">2 kg</div>
+                    </div>
+                {% else %}
+                    <h6 class="fw-bold mb-3">Quantity</h6>
+                    <div class="qty-selector">
+                        <button onclick="updateQty(-1)"><i class="bi bi-dash-lg"></i></button>
+                        <span id="qtyVal">1</span>
+                        <button onclick="updateQty(1)"><i class="bi bi-plus-lg"></i></button>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if product.in_stock %}
+            <div class="d-grid gap-3 d-md-flex">
+                <button class="btn btn-success btn-lg px-5 py-3 rounded-4 fw-bold shadow-sm flex-grow-1" 
+                        id="addBtn" onclick="handleAddToCart()">
+                    <i class="bi bi-bag-plus me-2"></i> Add to Cart
+                </button>
+            </div>
+            {% else %}
+            <button class="btn btn-secondary btn-lg w-100 rounded-4" disabled>Notify Me When Available</button>
+            {% endif %}
+
+            <div class="mt-5">
+                <h5 class="fw-bold mb-3">Product Information</h5>
+                <p class="text-muted" style="line-height: 1.7;">{{ product.description }}</p>
+                
+                <div class="mt-4 p-3 border rounded-4 bg-light">
+                    <div class="row text-center g-2">
+                        <div class="col-4">
+                            <span class="d-block small text-muted">Shelf Life</span>
+                            <span class="fw-bold small">5-7 Days</span>
+                        </div>
+                        <div class="col-4 border-start border-end">
+                            <span class="d-block small text-muted">Unit</span>
+                            <span class="fw-bold small">{{ product.unit|default:"1 kg" }}</span>
+                        </div>
+                        <div class="col-4">
+                            <span class="d-block small text-muted">Storage</span>
+                            <span class="fw-bold small">Cool & Dry</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mobile-add-bar d-md-none">
+    <div>
+        <span class="d-block text-muted small">Total</span>
+        <span class="fw-bold fs-5">₹<span id="mobileTotal">{{ product.price }}</span></span>
+    </div>
+    <button class="btn btn-success rounded-3 px-4 fw-bold" onclick="handleAddToCart()">
+        Add to Cart
+    </button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'grocery/js/product_detail.js'%}"></script>
+{% endblock %}
