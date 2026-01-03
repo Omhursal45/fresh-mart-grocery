@@ -1,0 +1,110 @@
+:root {
+        --fresh-green: #2d6a4f;
+        --leaf-green: #74c69d;
+        --store-bg: #f9fbf9;
+        --earthy-black: #1b4332;
+    }
+
+    body {
+        background-color: var(--store-bg);
+        font-family: 'Poppins', sans-serif;
+        /* Prevent horizontal scroll on mobile */
+        overflow-x: hidden; 
+    }
+
+    /* Container adjustments for better vertical centering on mobile */
+    .signup-container {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        padding: 20px 0;
+    }
+
+    .signup-card {
+        border-radius: 20px;
+        border: 2px solid #e9f5ee;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(45, 106, 79, 0.05);
+        width: 100%;
+    }
+
+    .brand-logo {
+        color: var(--fresh-green);
+        font-weight: 800;
+        font-size: 1.8rem; /* Smaller for mobile */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .brand-logo i {
+        color: var(--leaf-green);
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.75rem;
+        color: var(--fresh-green);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control {
+        height: 50px; /* Slightly taller for better touch targets */
+        border-radius: 12px;
+        border: 1px solid #d8e3dc;
+        background-color: #fafdfb;
+    }
+
+    .btn-fresh {
+        background-color: var(--fresh-green);
+        color: white;
+        height: 55px;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border: none;
+        width: 100%;
+    }
+
+    /* Responsive Font and Padding Adjustments */
+    @media (min-width: 768px) {
+        .brand-logo {
+            font-size: 2.2rem;
+        }
+        .signup-card {
+            margin-top: 0;
+        }
+    }
+
+    /* Mobile-specific tweaks */
+    @media (max-width: 576px) {
+        .signup-card {
+            border-radius: 15px; /* Softer corners on mobile */
+            border: none; /* Cleaner on small screens */
+        }
+        .card-body {
+            padding: 1.5rem !important; /* Less padding to save space */
+        }
+        .trust-badges {
+            flex-direction: column; /* Stack badges on mobile */
+            gap: 10px !important;
+        }
+    }
+
+    .help-text {
+        font-size: 0.7rem;
+        color: #6c757d;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .errorlist {
+        color: #dc3545;
+        font-size: 0.8rem;
+        padding-left: 0;
+        list-style: none;
+        margin-top: 5px;
+    }

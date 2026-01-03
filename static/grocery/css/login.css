@@ -1,0 +1,89 @@
+
+    :root {
+        --fresh-green: #2d6a4f; /* Deep forest green for trust */
+        --leaf-green: #74c69d;  /* Light leaf green for accent */
+        --store-bg: #f9fbf9;    /* Very light green-tinted white */
+        --earthy-black: #1b4332;
+    }
+
+    body {
+        background-color: var(--store-bg);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .grocery-card {
+        border-radius: 20px;
+        border: 2px solid #e9f5ee;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(45, 106, 79, 0.05);
+    }
+
+    .brand-section {
+        margin-bottom: 2rem;
+    }
+
+    .brand-logo {
+        color: var(--fresh-green);
+        font-weight: 800;
+        font-size: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .brand-logo i {
+        color: var(--leaf-green);
+    }
+
+    .form-control {
+        height: 52px;
+        border-radius: 12px;
+        border: 1px solid #d8e3dc;
+        padding-left: 15px;
+        background-color: #fafdfb;
+    }
+
+    .form-control:focus {
+        border-color: var(--leaf-green);
+        box-shadow: 0 0 0 4px rgba(116, 198, 157, 0.15);
+    }
+
+    .btn-fresh {
+        background-color: var(--fresh-green);
+        color: white;
+        height: 52px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-fresh:hover {
+        background-color: var(--earthy-black);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .signup-link {
+        color: var(--fresh-green);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .signup-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Decorative element */
+    .fresh-badge {
+        background: #e9f5ee;
+        color: var(--fresh-green);
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
