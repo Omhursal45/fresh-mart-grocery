@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - Your Fresh Grocery Store{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'grocery/css/login.css '%}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            
+            <div class="text-center brand-section">
+                <div class="fresh-badge">Quality You Can Trust</div>
+                <h1 class="brand-logo mb-0">
+                    <i class="bi bi-basket-fill"></i> grocery
+                </h1>
+                <p class="text-muted small">Freshness delivered from farm to table</p>
+            </div>
+
+            <div class="card grocery-card">
+                <div class="card-body p-4 p-lg-5">
+                    <h3 class="fw-bold mb-4 text-center text-dark">Welcome Back</h3>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">USERNAME</label>
+                            <input type="text" class="form-control" name="username" placeholder="Your username" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">PASSWORD</label>
+                            <input type="password" class="form-control" name="password" placeholder="••••••••" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-fresh w-100">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted small mb-0">Ready to fill your cart?</p>
+                        <a href="{% url 'signup' %}" class="signup-link">Create an account</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="text-center mt-5">
+                <p class="text-muted" style="font-size: 0.75rem;">
+                    Secure Checkout <i class="bi bi-shield-lock-fill"></i><br>
+                    © 2024 Your Grocery Store. All rights reserved.
+                </p>
+            </div> -->
+        </div>
+    </div>
+</div>
+{% endblock %}
