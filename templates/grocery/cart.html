@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Your Cart | Fresh Mart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'grocery/css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex align-items-center mb-4">
+        <h4 class="fw-bold mb-0">Review Items</h4>
+        <span id="item-count-badge">
+            {{ subtotal_items }} Items
+        </span>
+
+    </div>
+
+    {% if cart_items %}
+    <div class="row g-4" id="cart-main-row">
+        <div class="col-lg-8">
+            <div class="cart-items-wrapper">
+                {% for item in cart_items %}
+                <div class="cart-item-card shadow-sm mb-3" id="cart-item-{{ item.id }}">
+                    <div class="row align-items-center g-0 p-3">
+                        <div class="col-3 col-md-2">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" class="img-fluid rounded-3 border" alt="{{ item.product.name }}">
+                            {% else %}
+                                <div class="bg-light rounded-3 border d-flex align-items-center justify-content-center" style="aspect-ratio: 1/1;">
+                                    <i class="bi bi-image text-muted"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-6 col-md-7 px-3">
+                            <h6 class="fw-bold mb-1 text-truncate">{{ item.product.name }}</h6>
+                            <p class="text-muted small mb-2">{{ item.product.weight|default:"1 unit" }}</p>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="fw-bold text-dark">₹{{ item.product.price }}</span>
+                                <span class="text-muted small text-decoration-line-through">₹{{ item.product.price|add:20 }}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-md-3 text-end">
+                            <button class="btn btn-sm text-danger border-0 p-0 mb-2 hover-scale opacity-75" 
+                                    onclick="removeFromCart({{ item.id }})" 
+                                    title="Remove Item">
+                                <i class="bi bi-trash3 fs-6"></i>
+                            </button>
+
+                            <div class="qty-pill d-inline-flex align-items-center">
+                                <button class="qty-btn" onclick="changeQty({{ item.id }}, -1)">
+                                    <i class="bi bi-dash-lg"></i>
+                                </button>
+                                <input type="number" class="qty-input" id="qty-{{ item.id }}" value="{{ item.quantity }}" readonly>
+                                <button class="qty-btn" onclick="changeQty({{ item.id }}, 1)">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <strong id="total-{{ item.id }}">
+                                        ₹{{ item.product.price|floatformat:2 }}
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <a href="{% url 'product_list' %}" class="btn btn-link text-decoration-none fw-bold text-purple px-0 mt-2">
+                <i class="bi bi-plus-circle me-1"></i> Add more items
+            </a>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="summary-card shadow-sm p-4 sticky-top" style="top: 100px;">
+                <h6 class="fw-bold mb-4">Bill Summary</h6>
+                
+                <div class="bill-row">
+                    <span>Item Total</span>
+                    <span id="cart-subtotal">₹{{ subtotal }}</span>
+                </div>
+                <div class="bill-row">
+                    <span>Delivery Fee</span>
+                    <span class="text-success fw-bold">FREE</span>
+                </div>
+                <div class="bill-row">
+                    <span>Handling Fee</span>
+                    <span>₹2</span>
+                </div>
+
+                <hr class="my-3 dashed-hr">
+
+                <div class="bill-row mb-4">
+                    <span class="fw-bold fs-5">To Pay</span>
+                    <span class="fw-bold fs-5 text-purple" id="cart-total">₹{{ subtotal|add:2 }}</span>
+                </div>
+
+                <a href="{% url 'checkout' %}" class="btn-checkout-zepto">
+                    Proceed to Checkout <i class="bi bi-chevron-right ms-2"></i>
+                </a>
+
+                <div class="mt-4 p-3 bg-light rounded-3 border-start border-4 border-success">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-shield-check text-success"></i>
+                        <span class="extra-small text-muted">Safe and Secure Payments. 100% Authentic products.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5" id="empty-cart-view">
+        <div class="mb-4">
+            <i class="bi bi-cart-x text-muted opacity-25" style="font-size: 6rem;"></i>
+        </div>
+        <h3 class="fw-bold">Your cart is empty</h3>
+        <p class="text-muted mb-4">Add items to your cart to see them here.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-primary rounded-pill px-5 py-3 fw-bold">
+            Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script src="{% static 'grocery/js/cart.js' %}"></script>
+{% endblock %}
