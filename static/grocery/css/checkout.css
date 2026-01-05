@@ -1,0 +1,117 @@
+/* grocery/css/checkout.css */
+:root {
+    --zepto-purple: #3c006b;
+    --zepto-bg: #f3f4f6;
+    --zepto-success: #108548;
+}
+
+body {
+    background-color: var(--zepto-bg);
+    font-family: 'Inter', sans-serif;
+}
+
+.checkout-card {
+    background: #fff;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.card-header-zepto {
+    padding: 15px 20px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+}
+
+/* Address & Slot Grid */
+.address-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.address-option, .slot-option, .payment-item {
+    cursor: pointer;
+    position: relative;
+    display: block;
+}
+
+.address-option input, .slot-option input, .payment-item input {
+    position: absolute;
+    opacity: 0;
+}
+
+.address-content, .slot-content, .payment-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.2s ease;
+}
+
+.address-option input:checked + .address-content,
+.slot-option input:checked + .slot-content,
+.payment-item input:checked + .payment-box {
+    border-color: var(--zepto-purple);
+    background-color: #f9f5ff;
+}
+
+.check-icon {
+    color: var(--zepto-purple);
+    display: none;
+}
+
+input:checked ~ .address-content .check-icon,
+input:checked ~ .slot-content .check-icon,
+input:checked ~ .payment-box .check-icon {
+    display: block;
+}
+
+/* Coupon Styles */
+.coupon-card {
+    border: 1px dashed var(--zepto-success);
+    background: #f0fff4;
+}
+
+.coupon-input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-weight: 600;
+    outline: none;
+}
+
+.apply-btn {
+    border: none;
+    background: none;
+    color: var(--zepto-purple);
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* Bill Details */
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+/* The Zepto Button */
+.zepto-pay-btn {
+    background: var(--zepto-purple);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    transition: transform 0.1s active;
+}
+
+.zepto-pay-btn:active {
+    transform: scale(0.98);
+}
+
+.x-small { font-size: 0.7rem; }
