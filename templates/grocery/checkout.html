@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Checkout | Fresh Mart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'grocery/css/checkout.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+{% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="checkout-container">
+    <form method="post" action="{% url 'checkout' %}" id="checkout-form" class="container py-4">
+        {% csrf_token %}
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                
+                <div class="checkout-card mb-4">
+                    <div class="card-header-zepto">
+                        <i class="bi bi-geo-alt-fill text-danger me-2"></i> Select Delivery Address
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="address-grid">
+                            {% for address in addresses %}
+                            <label class="address-option">
+                                <input type="radio" name="address_id" value="{{ address.id }}" 
+                                    {% if address.is_default %}checked{% endif %} required>
+                                <div class="address-content">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="addr-type text-uppercase">{% if forloop.first %}Home{% else %}Other{% endif %}</span>
+                                        <i class="bi bi-check-circle-fill check-icon"></i>
+                                    </div>
+                                    <p class="addr-name mb-1">{{ address.name }}</p>
+                                    <p class="addr-details mb-2">{{ address.address_line1 }}, {{ address.city }}</p>
+                                    <p class="addr-phone mb-0"><i class="bi bi-telephone small me-1"></i> {{ address.phone }}</p>
+                                </div>
+                            </label>
+                            {% empty %}
+                            <div class="w-100 p-4 text-center">
+                                <p class="text-muted">No saved addresses found.</p>
+                            </div>
+                            {% endfor %}
+                            
+                            <a href="{% url 'address_create' %}" class="add-address-btn">
+                                <i class="bi bi-plus-circle fs-4 mb-2"></i>
+                                <span>Add New Address</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-card mb-4">
+                    <div class="card-header-zepto">
+                        <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Delivery Slot
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="row g-2">
+                            {% for slot in delivery_slots %}
+                            <div class="col-md-6">
+                                <label class="slot-option {% if slot.is_full %}disabled{% endif %}">
+                                    <input type="radio" name="delivery_slot_id" value="{{ slot.id }}" 
+                                        {% if slot.is_full %}disabled{% endif %} required>
+                                    <div class="slot-content">
+                                        <div>
+                                            <span class="slot-time fw-bold d-block">{{ slot.start_time }} – {{ slot.end_time }}</span>
+                                            <span class="slot-date small text-muted">{{ slot.delivery_date }}</span>
+                                        </div>
+                                        <i class="bi bi-check-circle-fill check-icon"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            {% empty %}
+                                <div class="col-12 text-center p-4">
+                                    <p class="text-danger fw-bold">
+                                        No delivery slots available right now.
+                                    </p>
+                                </div>
+                                {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-card mb-4">
+                    <div class="card-header-zepto">
+                        <i class="bi bi-credit-card-2-back-fill text-primary me-2"></i> Payment Method
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="payment-options d-flex flex-column gap-2">
+                            <label class="payment-item">
+                                <input type="radio" name="payment_method" value="ONLINE" checked required>
+                                <div class="payment-box">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <i class="bi bi-phone-vibrate fs-4 text-purple"></i> 
+                                        <span>Online Payment <small class="d-block text-muted">UPI, Cards, Netbanking</small></span>
+                                    </div>
+                                    <i class="bi bi-check-circle-fill check-icon"></i>
+                                </div>
+                            </label>
+                            <label class="payment-item">
+                                <input type="radio" name="payment_method" value="COD">
+                                <div class="payment-box">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <i class="bi bi-cash-stack fs-4 text-success"></i>
+                                        <span>Cash on Delivery <small class="d-block text-muted">Pay at your doorstep</small></span>
+                                    </div>
+                                    <i class="bi bi-check-circle-fill check-icon"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sticky-sidebar">
+                    
+                    <div class="checkout-card mb-3 coupon-card">
+                        <div class="d-flex align-items-center p-3">
+                            <i class="bi bi-ticket-perforated text-success fs-4 me-3"></i>
+                            <div class="flex-grow-1">
+                                <input type="text" id="coupon-code" class="coupon-input" placeholder="Enter coupon code" style="text-transform: uppercase;">
+                            </div>
+                            <button type="button" id="apply-btn" class="apply-btn" onclick="applyCoupon()">APPLY</button>
+                        </div>
+                        <div id="coupon-message" class="px-3 pb-2 small fw-bold"></div>
+                        <input type="hidden" name="applied_discount" id="applied-discount" value="0">
+                    </div>
+
+                    <div class="checkout-card p-4">
+                        <h6 class="fw-bold mb-3">Bill Details</h6>
+                        
+                        <div class="bill-row">
+                            <span>Item Total</span>
+                            <span id="raw-subtotal" data-value="{{ subtotal }}">₹{{ subtotal }}</span>
+                        </div>
+                        <div class="bill-row" id="discount-row" style="display:none">
+                            <span class="text-success">Coupon Discount</span>
+                            <span class="text-success" id="discount-amount">-₹0</span>
+                        </div>
+                        <div class="bill-row">
+                            <span>Delivery Fee</span>
+                            <div class="text-end">
+                                <span class="text-decoration-line-through text-muted small me-1">₹35</span>
+                                <span class="text-success fw-bold">FREE</span>
+                            </div>
+                        </div>
+                        <div class="bill-row">
+                            <span>Handling Fee</span>
+                            <span>₹2</span>
+                        </div>
+                        
+                        <hr class="my-3" style="border-style: dashed;">
+
+                        <div class="bill-row fw-bold fs-5 mb-4">
+                            <span>To Pay</span>
+                            <span id="final-total">₹{{ total|add:2 }}</span>
+                        </div>
+
+                        <button type="submit" id="place-order-btn" class="zepto-pay-btn d-flex justify-content-between align-items-center w-100 px-2">
+                            <span class="text-start">
+                                <span class="d-block x-small opacity-75">TOTAL</span>
+                                <span id="btn-total" class="fs-5">₹{{ total|add:2 }}</span>
+                            </span>
+                            <span class="fw-bold">
+                                PLACE ORDER <i class="bi bi-chevron-right ms-1"></i>
+                            </span>
+                        </button>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <p class="text-muted extra-small">By placing the order, you agree to our Terms of Service</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script src="{% static 'grocery/js/checkout.js' %}"></script>
+{% endblock %}
