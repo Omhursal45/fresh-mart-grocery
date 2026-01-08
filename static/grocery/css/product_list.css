@@ -37,7 +37,7 @@
         display: none;
         overflow-x: auto;
         white-space: nowrap;
-        padding-bottom: 10px;
+        padding-bottom: 11px;
         -webkit-overflow-scrolling: touch;
     }
     .mobile-cats::-webkit-scrollbar { display: none; }
