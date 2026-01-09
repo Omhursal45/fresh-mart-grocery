@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile | Fresh Mart{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-4">
+        
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 text-center p-4 mb-4">
+                <div class="position-relative d-inline-block mx-auto mb-3">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center border border-2 border-white shadow-sm" style="width:100px; height:100px; font-size:2.5rem; background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);">
+                        <i class="bi bi-person text-secondary"></i>
+                    </div>
+                    <a href="{% url 'edit_profile' %}" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width:30px; height:30px; text-decoration:none;">
+                        <i class="bi bi-camera-fill" style="font-size: 0.8rem;"></i>
+                    </a>
+                </div>
+                <h5 class="fw-bold mb-0">{{ user.get_full_name|default:user.username }}</h5>
+                <p class="text-muted small mb-3">{{ user.email }}</p>
+                <span class="badge bg-success-soft text-success px-3 py-2 rounded-pill small">
+                    <i class="bi bi-shield-check me-1"></i> Verified Member
+                </span>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="list-group list-group-flush profile-menu">
+                    <a href="{% url 'orders' %}" class="list-group-item list-group-item-action py-3 border-0 active-menu">
+                        <i class="bi bi-bag-heart me-3 fs-5"></i> My Orders
+                    </a>
+                    <a href="{% url 'freshwallet' %}" class="list-group-item list-group-item-action py-3 border-0">
+                        <i class="bi bi-wallet2 me-3 fs-5 text-warning"></i> Fresh Mart Wallet
+                    </a>
+                    <a href="{% url 'wishlist' %}" class="list-group-item list-group-item-action py-3 border-0">
+                        <i class="bi bi-heart me-3 fs-5 text-danger"></i> Wishlist
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action py-3 border-0">
+                        <i class="bi bi-geo-alt me-3 fs-5 text-primary"></i> Saved Addresses
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action py-3 border-0">
+                        <i class="bi bi-bell me-3 fs-5 text-info"></i> Notifications
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action py-3 border-0">
+                        <i class="bi bi-headset me-3 fs-5 text-secondary"></i> Help & Support
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white h-100">
+                        <p class="text-muted small mb-1">Total Orders</p>
+                        <h4 class="fw-bold mb-0 text-success">{{ orders.count|default:"0" }}</h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white h-100">
+                        <p class="text-muted small mb-1">Items in Cart</p>
+                        <h4 class="fw-bold mb-0 text-primary">{{ cart_count|default:"0" }}</h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white h-100">
+                        <p class="text-muted small mb-1">Saved with Offers</p>
+                        <h4 class="fw-bold mb-0 text-danger">₹450</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">Saved Addresses</h5>
+                <a href="{% url 'address_create' %}" class="text-primary text-decoration-none fw-600 small">
+                    <i class="bi bi-plus-lg"></i> Add New
+                </a>
+            </div>
+
+            <div class="row g-3 mb-5">
+                {% for address in addresses %}
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 h-100 address-card">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-house-door text-success fs-5"></i>
+                                <span class="fw-bold">{{ address.name }}</span>
+                                {% if address.is_default %}
+                                    <span class="badge bg-success-soft text-success x-small">Default</span>
+                                {% endif %}
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                    <li><a class="dropdown-item small" href="{% url 'address_update' address.id %}">Edit</a></li>
+                                    <li><a class="dropdown-item small text-danger" href="{% url 'address_delete' address.id %}">Delete</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-1">{{ address.address_line1 }}, {{ address.city }}</p>
+                        <p class="text-muted small mb-0">Phone: {{ address.phone }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-4 card border-0 shadow-sm rounded-4 bg-light">
+                    <p class="text-muted mb-0">No addresses saved yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h5 class="fw-bold mb-3">Recent Orders</h5>
+{% for order in orders %}
+<div class="card border-0 shadow-sm rounded-4 p-3 mb-3 order-card" onclick="window.location='{% url 'order_detail' order.id %}'">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-light rounded-3 p-3 text-success">
+                <i class="bi bi-box-seam fs-4"></i>
+            </div>
+            <div>
+                <h6 class="fw-bold mb-1">Order #{{ order.order_number|default:order.id }}</h6>
+                <p class="text-muted x-small mb-0">{{ order.created_at|date:"D, d M Y" }}</p>
+            </div>
+        </div>
+        <div class="text-end">
+            <p class="fw-bold text-success mb-1">₹{{ order.total }}</p>
+            <span class="badge bg-light text-dark border rounded-pill x-small px-2 py-1">
+                {{ order.get_current_status_display|default:order.current_status|title }}
+            </span>
+        </div>
+    </div>
+</div>
+{% empty %}
+    
+            <div class="text-center py-5">
+                <img src="https://cdn-icons-png.flaticon.com/512/11329/11329073.png" width="80" class="mb-3 opacity-50" alt="">
+                <p class="text-muted">You haven't placed any orders yet.</p>
+                <a href="/" class="btn btn-success rounded-pill px-4 shadow-sm">Start Shopping</a>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Professional Color Palette */
+    :root {
+        --zepto-purple: #3c006b;
+        --soft-success: #e8f5e9;
+        --soft-primary: #e3f2fd;
+    }
+
+    body {
+        background-color: #f8f9fa;
+    }
+
+    /* Soft Badges */
+    .bg-success-soft { background-color: var(--soft-success); }
+    .bg-primary-soft { background-color: var(--soft-primary); }
+
+    /* Custom Fonts */
+    .fw-600 { font-weight: 600; }
+    .x-small { font-size: 11px; }
+
+    /* Sidebar Styling */
+    .profile-menu .list-group-item {
+        color: #495057;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+    .profile-menu .list-group-item:hover {
+        background-color: #fdfdfd;
+        color: var(--zepto-purple);
+        padding-left: 1.5rem;
+    }
+    .active-menu {
+        border-left: 4px solid var(--zepto-purple) !important;
+        background-color: #f8f9ff !important;
+        color: var(--zepto-purple) !important;
+    }
+
+    /* Card Hover Effects */
+    .address-card, .order-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+    .address-card:hover, .order-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.08) !important;
+    }
+
+    /* Quick Stats Shadow */
+    .card.shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.045) !important;
+    }
+
+    /* Clean Dropdown */
+    .dropdown-item:active { background-color: var(--zepto-purple); }
+</style>
+{% endblock %}
