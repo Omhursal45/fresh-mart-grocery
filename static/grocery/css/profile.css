@@ -1,0 +1,55 @@
+
+    /* Professional Color Palette */
+    :root {
+        --zepto-purple: #3c006b;
+        --soft-success: #e8f5e9;
+        --soft-primary: #e3f2fd;
+    }
+
+    body {
+        background-color: #f8f9fa;
+    }
+
+    /* Soft Badges */
+    .bg-success-soft { background-color: var(--soft-success); }
+    .bg-primary-soft { background-color: var(--soft-primary); }
+
+    /* Custom Fonts */
+    .fw-600 { font-weight: 600; }
+    .x-small { font-size: 11px; }
+
+    /* Sidebar Styling */
+    .profile-menu .list-group-item {
+        color: #495057;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+    .profile-menu .list-group-item:hover {
+        background-color: #fdfdfd;
+        color: var(--zepto-purple);
+        padding-left: 1.5rem;
+    }
+    .active-menu {
+        border-left: 4px solid var(--zepto-purple) !important;
+        background-color: #f8f9ff !important;
+        color: var(--zepto-purple) !important;
+    }
+
+    /* Card Hover Effects */
+    .address-card, .order-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+    .address-card:hover, .order-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.08) !important;
+    }
+
+    /* Quick Stats Shadow */
+    .card.shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.045) !important;
+    }
+
+    /* Clean Dropdown */
+    .dropdown-item:active { background-color: var(--zepto-purple); }
