@@ -24,12 +24,12 @@
                 <h6 class="fw-bold mb-4 px-3">Categories</h6>
                 <div class="list-group list-group-flush">
                     <a href="{% url 'product_list' %}" 
-                       class="list-group-item list-group-item-action rounded-3 mb-1 {% if not current_category %}sidebar-active{% endif %}">
+                        class="list-group-item list-group-item-action rounded-3 mb-1 {% if not current_category %}sidebar-active{% endif %}">
                         <i class="bi bi-grid"></i> All Products
                     </a>
                     {% for category in categories %}
                     <a href="{% url 'product_list' %}?category={{ category.slug }}" 
-                       class="list-group-item list-group-item-action rounded-3 mb-1 {% if current_category.slug == category.slug %}sidebar-active{% endif %}">
+                        class="list-group-item list-group-item-action rounded-3 mb-1 {% if current_category.slug == category.slug %}sidebar-active{% endif %}">
                         <i class="bi bi-chevron-right small"></i> {{ category.name }}
                     </a>
                     {% endfor %}
@@ -40,13 +40,18 @@
         <div class="col-lg-9 col-xl-10">
             <nav aria-label="breadcrumb" class="mb-3">
                 <ol class="breadcrumb bg-transparent p-0 small">
-                    <li class="breadcrumb-item"><a href="/" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-muted text-decoration-none">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+
                     <li class="breadcrumb-item active fw-bold text-dark">{{ current_category.name|default:"All Products" }}</li>
                 </ol>
             </nav>
 
             <div class="rounded-4 p-4 mb-5 d-flex align-items-center justify-content-between" 
-                 style="background: linear-gradient(90deg, #3c006b 0%, #6b21a8 100%); color: white;">
+                style="background: linear-gradient(90deg, #3c006b 0%, #6b21a8 100%); color: white;">
                 <div>
                     <span class="badge bg-warning text-dark mb-2">LIMITED OFFER</span>
                     <h2 class="fw-extrabold mb-1">{{ current_category.name|default:"Fresh Grocery" }}</h2>
@@ -63,7 +68,9 @@
                     <div class="card h-100 product-card p-2">
                         <div class="img-wrapper mb-2">
                             {% if product.old_price %}
-                                <div class="save-badge">SAVE ₹{{ product.old_price|add:product.price }}</div>
+                                <div class="save-badge">
+                                    SAVE ₹{{ product.old_price|floatformat:0|add:-product.price }}
+                                </div>
                             {% endif %}
                             
                             <a href="{% url 'product_detail' slug=product.slug %}">
@@ -72,8 +79,9 @@
                                 {% endif %}
                             </a>
 
-                            <button class="btn btn-outline-danger btn-sm position-absolute bottom-0 end-0 m-2 bg-white px-3 fw-bold add-to-cart-btn" 
-                                    data-product-id="{{ product.id }}">
+                            <button class="btn btn-outline-danger btn-sm position-absolute bottom-0 end-0 m-2 bg-white px-3 fw-bold add-to-cart-btn"
+                                    data-product-id="{{ product.id }}"
+                                    title="Add to cart">
                                 ADD
                             </button>
                         </div>
@@ -97,7 +105,7 @@
                 {% empty %}
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
-                    <h5 class="text-muted">No products found here.</h5>
+                    <h5 class="text-muted">No products available in this category.</h5>
                     <a href="{% url 'product_list' %}" class="btn btn-primary mt-3">Browse All Products</a>
                 </div>
                 {% endfor %}
