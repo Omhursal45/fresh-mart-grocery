@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wishlist | Grocery Delivery{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'grocery/css/wishlist.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Wishlist</h2>
+
+    {% if wishlist_items %}
+    <div class="row g-4">
+        {% for item in wishlist_items %}
+        <div class="col-6 col-md-3">
+            <div class="card wishlist-card h-100">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-image" style="font-size:3rem;color:#ccc;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title">{{ item.product.name }}</h6>
+                    <p class="text-primary mb-2">
+                        ₹{{ item.product.price }}{% if item.product.is_weight_based %}/kg{% endif %}
+                    </p>
+                    <a href="{% url 'product_detail' item.product.slug %}" class="btn btn-outline-primary btn-sm mb-2">View Product</a>
+                    <button class="btn btn-remove btn-sm mt-auto" onclick="removeFromWishlist({{ item.product.id }}, this)">
+                        <i class="bi bi-trash"></i> Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="empty-msg">
+            <i class="bi bi-heart"></i> Your wishlist is empty.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'grocery/js/wishlist.js' %}"></script>
+{% endblock %}
