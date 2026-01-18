@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Orders | Fresh Mart{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="fw-bold mb-4 d-flex align-items-center">
+        <i class="bi bi-bag-check-fill text-primary me-2"></i> My Orders
+    </h2>
+
+    {% if orders %}
+    <div class="orders-wrapper">
+        <div class="d-none d-md-block card border-0 shadow-sm rounded-4 overflow-hidden">
+            <table class="table align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Order Details</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td class="ps-4">
+                            <span class="fw-bold text-dark">#{{ order.order_number }}</span>
+                        </td>
+                        <td>{{ order.created_at|date:"d M Y" }}</td>
+                        <td>
+                            <span class="badge rounded-pill status-badge {{ order.current_status }}">
+                                {{ order.get_current_status_display|title }}
+                            </span>
+                        </td>
+                        <td class="fw-bold">₹{{ order.total }}</td>
+                        <td class="text-end pe-4">
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{% url 'order_detail' order.id %}" class="btn btn-light btn-sm rounded-3 border">
+                                    View Details
+                                </a>
+                                {% if order.current_status == 'placed' or order.current_status == 'packed' %}
+                                <form method="post" action="{% url 'cancel_order' order.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-3" onclick="return confirm('Cancel this order?')">
+                                        Cancel
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-md-none d-flex flex-column gap-3">
+            {% for order in orders %}
+            <div class="order-mobile-card p-3 shadow-sm border">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <span class="text-muted small d-block">Order ID</span>
+                        <span class="fw-bold">#{{ order.order_number }}</span>
+                    </div>
+                    <span class="badge status-badge {{ order.current_status }}">
+                        {{ order.get_current_status_display|title }}
+                    </span>
+                </div>
+                
+                <div class="row g-0 py-2 border-top border-bottom my-2">
+                    <div class="col-6">
+                        <span class="text-muted small d-block">Date</span>
+                        <span>{{ order.created_at|date:"d M, Y" }}</span>
+                    </div>
+                    <div class="col-6 text-end">
+                        <span class="text-muted small d-block">Total Amount</span>
+                        <span class="fw-bold text-primary">₹{{ order.total }}</span>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 pt-2">
+                    <a href="{% url 'order_detail' order.id %}" class="btn btn-primary btn-sm rounded-3">
+                        Track & View Order
+                    </a>
+                    {% if order.current_status == 'placed' or order.current_status == 'packed' %}
+                    <form method="post" action="{% url 'cancel_order' order.id %}" class="d-grid">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-3">
+                            Cancel Order
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center py-5">
+        <img src="https://cdn-icons-png.flaticon.com/512/11329/11329073.png" alt="Empty" style="width: 120px; opacity: 0.5;">
+        <h4 class="mt-4 fw-bold">No orders found</h4>
+        <p class="text-muted">Looks like you haven't placed any orders yet.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-primary rounded-pill px-4 py-2 mt-2">
+            Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'grocery/css/order.css' %}">
+{% endblock %}
