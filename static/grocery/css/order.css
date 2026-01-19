@@ -1,0 +1,88 @@
+/* grocery/css/order.css */
+
+.zepto-style-bg {
+    background-color: #f1f3f6; /* The light grey app background */
+    min-height: 100vh;
+}
+
+.max-width-container {
+    max-width: 600px; /* Centers the UI like a mobile app on desktop */
+}
+
+.order-card-zepto {
+    border-radius: 18px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+/* Status Pills */
+.status-badge-zepto {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.status-badge-zepto .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+/* Status Colors */
+.status-badge-zepto.placed { background: #fff4e5; color: #ff9800; }
+.status-badge-zepto.placed .dot { background: #ff9800; }
+
+.status-badge-zepto.delivered { background: #e8f5e9; color: #2e7d32; }
+.status-badge-zepto.delivered .dot { background: #2e7d32; }
+
+.status-badge-zepto.cancelled { background: #ffebee; color: #d32f2f; }
+.status-badge-zepto.cancelled .dot { background: #d32f2f; }
+
+/* Typography */
+.price-text-zepto {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.order-info-zepto h6 {
+    font-size: 14px;
+}
+
+/* Buttons */
+.btn-zepto-primary {
+    background-color: #3e4152; /* Dark professional slate */
+    color: white !important;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 14px;
+}
+
+.btn-zepto-secondary {
+    background-color: #f1f3f6;
+    color: #3e4152 !important;
+    padding: 10px 15px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-zepto-danger {
+    background-color: #fff0f0;
+    color: #d32f2f;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 12px;
+}
+
+.card-actions-zepto {
+    background-color: #ffffff;
+}
