@@ -88,25 +88,25 @@ def checkout_view(request):
     }
     return render(request, 'grocery/checkout.html', context)
 
-# @login_required
-# def order_list_view(request):
-#     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-#     return render(request, 'grocery/orders.html', {'orders': orders})
+@login_required
+def order_list_view(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'grocery/orders.html', {'orders': orders})
 
 
-# @login_required
-# def order_detail_view(request, order_id):
-#     order = get_object_or_404(Order, id=order_id, user=request.user)
-#     return render(request, 'grocery/order_detail.html', {'order': order})
+@login_required
+def order_detail_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'grocery/order_detail.html', {'order': order})
 
 
-# @login_required
-# def cancel_order(request, order_id):
-#     order = get_object_or_404(Order, id=order_id, user=request.user)
-#     if order.current_status not in ['placed', 'packed']:
-#         messages.error(request, "Order cannot be cancelled.")
-#         return redirect('orders')
-#     order.current_status = 'cancelled'
-#     order.save()
-#     messages.success(request, "Order cancelled successfully.")
-#     return redirect('orders')
+@login_required
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if order.current_status not in ['placed', 'packed']:
+        messages.error(request, "Order cannot be cancelled.")
+        return redirect('orders')
+    order.current_status = 'cancelled'
+    order.save()
+    messages.success(request, "Order cancelled successfully.")
+    return redirect('orders')
