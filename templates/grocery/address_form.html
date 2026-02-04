@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Address{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-3">
+    <div class="col-lg-5 col-md-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white py-2">
+                <h6 class="mb-0">{{ action }} Address</h6>
+            </div>
+            <div class="card-body p-3">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-7">
+                            <label for="name" class="form-label small fw-bold mb-1">Full Name *</label>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" 
+                                   value="{{ address.name|default:'' }}" required>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="phone" class="form-label small fw-bold mb-1">Phone *</label>
+                            <input type="tel" pattern="[0-9]{10}" class="form-control form-control-sm" 
+                                   id="phone" name="phone" value="{{ address.phone|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="address_line1" class="form-label small fw-bold mb-1">Address Line 1 *</label>
+                        <input type="text" class="form-control form-control-sm" id="address_line1" name="address_line1" 
+                               value="{{ address.address_line1|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="address_line2" class="form-label small mb-1">Address Line 2 (Optional)</label>
+                        <input type="text" class="form-control form-control-sm" id="address_line2" name="address_line2" 
+                               value="{{ address.address_line2|default:'' }}">
+                    </div>
+
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <label for="city" class="form-label small fw-bold mb-1">City *</label>
+                            <input type="text" class="form-control form-control-sm" id="city" name="city" 
+                                   value="{{ address.city|default:'' }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="state" class="form-label small fw-bold mb-1">State *</label>
+                            <input type="text" class="form-control form-control-sm" id="state" name="state" 
+                                   value="{{ address.state|default:'' }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="postal_code" class="form-label small fw-bold mb-1">Zip *</label>
+                            <input type="text" pattern="[0-9]{6}" class="form-control form-control-sm" 
+                                   id="postal_code" name="postal_code" value="{{ address.postal_code|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="is_default" name="is_default" 
+                               {% if address and address.is_default %}checked{% endif %}>
+                        <label class="form-check-label small" for="is_default">Set as default</label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-sm flex-grow-1" id="save-btn">
+                            <span id="btn-text">Save</span>
+                            <span id="btn-spinner" class="spinner-border spinner-border-sm d-none"></span>
+                        </button>
+                        <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-sm flex-grow-1">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
