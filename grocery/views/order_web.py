@@ -15,10 +15,17 @@ def checkout_view(request):
         return redirect('cart')
 
     addresses = Address.objects.filter(user=request.user)
+    from django.db.models import F
+
     delivery_slots = DeliverySlot.objects.filter(
         delivery_date__gte=timezone.now().date(),
-        is_available=True
+        is_available=True,
+        current_orders__lt=F('max_orders')
     ).order_by('delivery_date', 'start_time')[:10]
+
+    if not delivery_slots.exists():
+        delivery_slots = DeliverySlot.ensure_upcoming_slots()[:10]
+        messages.info(request, 'Delivery slots have been populated automatically. Please select one to continue.')
 
     subtotal = sum(item.product.price * item.quantity for item in cart_items)
     handling_fee = 2
