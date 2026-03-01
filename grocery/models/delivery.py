@@ -25,3 +25,32 @@ class DeliverySlot(models.Model):
 
     def __str__(self):
         return f"{self.slot_type.capitalize()} - {self.delivery_date}"
+
+    @classmethod
+    def ensure_upcoming_slots(cls, days=7):
+        """Generate delivery slots for the next `days` days and return a
+        queryset of available slots.
+        """
+        from datetime import date, time, timedelta
+
+        today = date.today()
+        for i in range(days):
+            slot_date = today + timedelta(days=i + 1)
+            for slot_type, start, end in [
+                ('morning', time(9, 0), time(12, 0)),
+                ('evening', time(17, 0), time(20, 0)),
+            ]:
+                cls.objects.get_or_create(
+                    delivery_date=slot_date,
+                    slot_type=slot_type,
+                    start_time=start,
+                    defaults={
+                        'end_time': end,
+                        'max_orders': 50,
+                        'is_available': True,
+                    }
+                )
+        return cls.objects.filter(
+            delivery_date__gte=today,
+            is_available=True
+        ).order_by('delivery_date', 'start_time')
