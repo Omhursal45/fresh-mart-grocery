@@ -4,6 +4,8 @@ from .models import (
     Product, Category, Cart, Order, OrderItem,
     Address, Coupon, DeliverySlot
 )
+from rest_framework import serializers
+from .models import CartItem, Product
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,18 +26,36 @@ class ProductSerializer(serializers.ModelSerializer):
             'is_active', 'in_stock', 'created_at'
         ]
 
-class CartSerializer(serializers.ModelSerializer):
+class CartItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
     product_price = serializers.FloatField(source='product.price', read_only=True)
     total_price = serializers.SerializerMethodField()
 
+    # allow sending product by id
+    product_id = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all(),
+        source='product',
+        write_only=True
+    )
+
     class Meta:
-        model = Cart
-        fields = ['id', 'product', 'quantity', 'product_name', 'product_price', 'total_price']
+        model = CartItem
+        fields = ['id', 'product', 'product_id', 'quantity', 'product_name', 'product_price', 'total_price']
+        read_only_fields = ['product']
 
     def get_total_price(self, obj):
-        return float(obj.quantity * obj.product.price)
+        return float(obj.product.price * obj.quantity)
 
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+    subtotal = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cart
+        fields = ['id', 'items', 'subtotal']
+
+    def get_subtotal(self, obj):
+        return float(sum(item.product.price * item.quantity for item in obj.items.all()))
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
