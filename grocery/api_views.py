@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.utils import timezone
 from decimal import Decimal
+from django.db import transaction
+from django.db.models import F
 
 from .models import (
     Product, Category, Cart, Order, OrderItem, Address,
@@ -166,10 +168,23 @@ class DeliverySlotViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return DeliverySlot.objects.filter(
+
+        qs = DeliverySlot.objects.filter(
             delivery_date__gte=timezone.now().date(),
-            is_available=True
+            is_available=True,
+            current_orders__lt=F('max_orders')
         ).order_by('delivery_date', 'start_time')
+
+        if not qs.exists():
+        # Seed slots and re-fetch available ones
+            DeliverySlot.ensure_upcoming_slots()
+            qs = DeliverySlot.objects.filter(
+                delivery_date__gte=timezone.now().date(),
+                is_available=True,
+                current_orders__lt=F('max_orders')
+            ).order_by('delivery_date', 'start_time')
+
+        return qs
 
 
 @api_view(['POST'])
@@ -182,39 +197,65 @@ def checkout_api(request):
 
     address = get_object_or_404(Address, id=request.data.get('address_id'), user=request.user)
 
-    subtotal = sum(item.total_price for item in cart_items)
-    discount = Decimal('0')
-    coupon = None
+    slot_id = request.data.get('delivery_slot_id')
+    if not slot_id:
+        return Response({'error': 'Delivery slot is required'}, status=400)
 
-    code = request.data.get('coupon_code', '').strip()
-    if code:
-        coupon = get_object_or_404(Coupon, code=code, is_active=True)
-        valid, msg = coupon.is_valid(request.user, subtotal)
-        if not valid:
-            return Response({'error': msg}, status=400)
-        discount = coupon.calculate_discount(subtotal)
+    # Ensure slots exist before selecting
+    if not DeliverySlot.objects.filter(
+        delivery_date__gte=timezone.now().date(),
+        is_available=True
+    ).exists():
+        DeliverySlot.ensure_upcoming_slots()
 
-    order = Order.objects.create(
-        user=request.user,
-        address=address,
-        subtotal=subtotal,
-        discount=discount,
-        total=subtotal - discount
-    )
+    with transaction.atomic():
+        delivery_slot = DeliverySlot.objects.select_for_update().filter(
+            id=slot_id,
+            is_available=True,
+            current_orders__lt=F('max_orders')
+        ).first()
 
-    for item in cart_items:
-        OrderItem.objects.create(
-            order=order,
-            product=item.product,
-            product_name=item.product.name,
-            product_price=item.product.price,
-            quantity=item.quantity,
-            total=item.total_price
+        if not delivery_slot:
+            return Response({'error': 'Selected delivery slot is full or unavailable'}, status=400)
+
+        subtotal = sum(item.total_price for item in cart_items)
+        discount = Decimal('0')
+        coupon = None
+
+        code = request.data.get('coupon_code', '').strip()
+        if code:
+            coupon = get_object_or_404(Coupon, code=code, is_active=True)
+            valid, msg = coupon.is_valid(request.user, subtotal)
+            if not valid:
+                return Response({'error': msg}, status=400)
+            discount = coupon.calculate_discount(subtotal)
+
+        order = Order.objects.create(
+            user=request.user,
+            address=address,
+            delivery_slot=delivery_slot,
+            subtotal=subtotal,
+            discount=discount,
+            total=subtotal - discount
         )
-        item.product.stock -= item.quantity
-        item.product.save()
 
-    cart_items.delete()
-    order.update_status('placed', 'Order placed successfully')
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                product_name=item.product.name,
+                product_price=item.product.price,
+                quantity=item.quantity,
+                total=item.total_price
+            )
+            item.product.stock -= item.quantity
+            item.product.save()
+
+        # increment slot usage safely
+        delivery_slot.current_orders = F('current_orders') + 1
+        delivery_slot.save(update_fields=['current_orders'])
+
+        cart_items.delete()
+        order.update_status('placed', 'Order placed successfully')
 
     return Response(OrderSerializer(order).data, status=201)
