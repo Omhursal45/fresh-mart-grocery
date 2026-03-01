@@ -9,7 +9,7 @@ router.register(r'cart', api_views.CartViewSet, basename='cart')
 router.register(r'orders', api_views.OrderViewSet, basename='order')
 router.register(r'addresses', api_views.AddressViewSet, basename='address')
 router.register(r'coupons', api_views.CouponViewSet, basename='coupon')
-router.register(r'delivery-slots', api_views.DeliverySlotViewSet, basename='deliveryslot')
+router.register(r'delivery-slots', api_views.DeliverySlotViewSet, basename='delivery-slots')
 
 urlpatterns = [
     path('', include(router.urls)),
