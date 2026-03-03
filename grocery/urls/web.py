@@ -11,6 +11,7 @@ from grocery.views.address_web import (
     address_update_view,
     address_delete_view,
 )
+from grocery.views.review import add_review
 from grocery.views.wishlist_web import wishlist_view, add_to_wishlist
 
 urlpatterns = [
@@ -46,4 +47,6 @@ urlpatterns = [
     path("wishlist/add/<int:product_id>/", add_to_wishlist, name="add_to_wishlist"),
     
     path('search-suggestions/', search_suggestions, name='search_suggestions'),
+    
+    path('products/<int:product_id>/add-review/', add_review, name='add_review'),
 ]
