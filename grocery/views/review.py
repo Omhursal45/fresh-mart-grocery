@@ -5,26 +5,34 @@ from django.contrib import messages
 from ..models import Product, Review, OrderItem
 
 @login_required
-def add_review(request,product_id):
+def add_review(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    
-    if Review.objects.filter(product=product, user=request.user).exist():
+
+    # Prevent duplicate review
+    if Review.objects.filter(product=product, user=request.user).exists():
         messages.error(request, "You already reviewed this product.")
-        return redirect('product_detail', product_id = product_id)
-    
+        return redirect("product_detail", slug=product.slug)
+
+    # Check verified purchase
     has_purchased = OrderItem.objects.filter(
-        order__user=request.user,
-        order__status="Delivered",
-        product=product
-    ).exists()
+    product=product,
+    order__user=request.user,
+    order__current_status='delivered'
+).exists()
+    
+    print("HAS PURCHASED:", has_purchased)
 
     if not has_purchased:
         messages.error(request, "You can only review products you have purchased.")
-        return redirect("product_detail", product_id=product.id)
+        return redirect("product_detail", slug=product.slug)
 
     if request.method == "POST":
-        rating = request.POST.get("rating")
+        rating = int(request.POST.get("rating"))
         comment = request.POST.get("comment")
+
+        if rating < 1 or rating > 5:
+            messages.error(request, "Invalid rating value.")
+            return redirect("product_detail", slug=product.slug)
 
         Review.objects.create(
             product=product,
@@ -32,8 +40,8 @@ def add_review(request,product_id):
             rating=rating,
             comment=comment
         )
-
+        
         messages.success(request, "Review added successfully!")
-        return redirect("product_detail", product_id=product.id)
+        return redirect("product_detail", slug=product.slug)
 
-    return redirect("product_detail", product_id=product.id)
+    return redirect("product_detail", slug=product.slug)
