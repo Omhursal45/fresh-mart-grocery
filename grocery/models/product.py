@@ -3,7 +3,7 @@ from django.db import models
 from .category import Category,SubCategory
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-
+from django.db.models import Avg, Count
 class Product(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
@@ -42,3 +42,9 @@ class Product(models.Model):
     @property
     def in_stock(self):
         return self.stock > 0
+    
+    def average_rating(self):
+        return self.reviews.aggregate(avg=Avg('rating'))['avg'] or 0
+
+    def review_count(self):
+        return self.reviews.aggregate(count=Count('id'))['count'] or 0
