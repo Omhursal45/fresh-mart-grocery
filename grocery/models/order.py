@@ -12,7 +12,7 @@ class Order(models.Model):
         ('placed', 'Placed'),
         ('packed', 'Packed'),
         ('out_for_delivery', 'Out for delivery'),
-        ('delivered', 'Delivered'),
+        ('delivered', 'delivered'),
         ('cancelled', 'Cancelled'),
     ]
 
