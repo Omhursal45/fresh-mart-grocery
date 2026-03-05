@@ -29,11 +29,16 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'subcategory', 'price', 'stock', 'is_active', 'created_at')
+    list_display = ('name', 'category', 'subcategory','review_count', 'price', 'stock', 'is_active', 'created_at')
     list_filter = ('category', 'subcategory', 'is_active')
     search_fields = ('name', 'description')
     prepopulated_fields = {"slug": ("name",)}
     ordering = ('-created_at',)
+    
+    def review_count(self, obj):
+        return obj.reviews.count()
+
+    review_count.short_description = "Reviews"
 
 
 class CartItemInline(admin.TabularInline):
@@ -101,3 +106,4 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ('rating', 'created_at')
     search_fields = ('user__username', 'product__name', 'comment')
     readonly_fields = ('created_at',)
+    
