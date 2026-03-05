@@ -6,7 +6,8 @@ from .models import (
     Coupon,
     Address,
     DeliverySlot,
-    Order, OrderItem
+    Order, OrderItem,
+    Review,
 )
 
 @admin.register(Category)
@@ -93,3 +94,10 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('order_number', 'user__username')
     readonly_fields = ('created_at', 'updated_at')
     inlines = [OrderItemInline]
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'rating', 'created_at')
+    list_filter = ('rating', 'created_at')
+    search_fields = ('user__username', 'product__name', 'comment')
+    readonly_fields = ('created_at',)
