@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile | Fresh Mart{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --zepto-pink: #ff3269;
+        --soft-bg: #f8f9fa;
+        --card-radius: 24px;
+    }
+
+    body { background-color: var(--soft-bg); }
+
+    .profile-card {
+        background: #fff;
+        border-radius: var(--card-radius);
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        max-width: 500px;
+        margin: 40px auto;
+        text-align: center;
+    }
+
+    /* --- Device Upload Avatar Styling --- */
+    .avatar-wrapper {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 20px;
+        cursor: pointer;
+    }
+
+    .avatar-circle {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #f0ece9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .avatar-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .camera-badge {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: #007bff;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #fff;
+    }
+
+    #image-input { display: none; }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .btn-save {
+        background: var(--zepto-pink);
+        color: white;
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        border: none;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-card">
+        
+        <div class="avatar-wrapper" onclick="document.getElementById('image-input').click();">
+            <div class="avatar-circle">
+                {% if user.profile and user.profile.image %}
+                    <img id="profile-preview" src="{{ user.profile.image.url }}" alt="Profile">
+                {% else %}
+                    <img id="profile-preview" src="/static/images/default-user.png" alt="Profile">
+                {% endif %}
+            </div>
+            <div class="camera-badge">
+                <i class="bi bi-camera-fill"></i>
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-1">{{ user.username }}</h4>
+        <div class="badge bg-light text-success border mb-4 py-2 px-3 rounded-pill">
+            <i class="bi bi-patch-check"></i> Verified Member
+        </div>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <input type="file" name="image" id="image-input" accept="image/*" onchange="previewImage(event)">
+
+            <div class="mb-3 text-start">
+                <label class="form-label fw-bold">Username</label>
+                <input type="text" class="form-control" name="username" value="{{ user.username }}">
+            </div>
+
+            <div class="mb-3 text-start">
+                <label class="form-label fw-bold">Email</label>
+                <input type="email" class="form-control" name="email" value="{{ user.email }}">
+            </div>
+
+            <button type="submit" class="btn-save shadow-sm">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('profile-preview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+{% endblock %}
