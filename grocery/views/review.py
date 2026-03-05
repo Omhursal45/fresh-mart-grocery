@@ -8,23 +8,22 @@ from ..models import Product, Review, OrderItem
 def add_review(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
-    # Prevent duplicate review
+    
     if Review.objects.filter(product=product, user=request.user).exists():
         messages.error(request, "You already reviewed this product.")
         return redirect("product_detail", slug=product.slug)
 
-    # Check verified purchase
     has_purchased = OrderItem.objects.filter(
-    product=product,
-    order__user=request.user,
-    order__current_status='delivered'
-).exists()
+        product=product,
+        order__user=request.user,
+        order__current_status='delivered'
+    ).exists()
     
     print("HAS PURCHASED:", has_purchased)
 
-    if not has_purchased:
-        messages.error(request, "You can only review products you have purchased.")
-        return redirect("product_detail", slug=product.slug)
+    # if not has_purchased:
+    #     messages.error(request, "You can only review products you have purchased.")
+    #     return redirect("product_detail", slug=product.slug)
 
     if request.method == "POST":
         rating = int(request.POST.get("rating"))
