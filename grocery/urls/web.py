@@ -48,5 +48,5 @@ urlpatterns = [
     
     path('search-suggestions/', search_suggestions, name='search_suggestions'),
     
-    path('products/<int:product_id>/add-review/', add_review, name='add_review'),
+    path('products/<int:product_id>/review/', add_review, name='add_review'),
 ]
