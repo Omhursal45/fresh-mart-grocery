@@ -26,8 +26,14 @@ def add_review(request, product_id):
     #     return redirect("product_detail", slug=product.slug)
 
     if request.method == "POST":
-        rating = int(request.POST.get("rating"))
+        rating = request.POST.get("rating")
         comment = request.POST.get("comment")
+
+        if not rating:
+            messages.error(request, "Please select a rating.")
+            return redirect("product_detail", slug=product.slug)
+
+        rating = int(rating)
 
         if rating < 1 or rating > 5:
             messages.error(request, "Invalid rating value.")
