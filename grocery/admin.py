@@ -27,18 +27,19 @@ class SubCategoryAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
-@admin.register(Product)
+from django.db.models import Count
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'subcategory','review_count', 'price', 'stock', 'is_active', 'created_at')
-    list_filter = ('category', 'subcategory', 'is_active')
-    search_fields = ('name', 'description')
-    prepopulated_fields = {"slug": ("name",)}
-    ordering = ('-created_at',)
-    
-    def review_count(self, obj):
-        return obj.reviews.count()
 
-    review_count.short_description = "Reviews"
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.annotate(review_total=Count('reviews'))
+
+    def review_count(self, obj):
+        return obj.review_total
+    
+    
 
 
 class CartItemInline(admin.TabularInline):
@@ -106,4 +107,8 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ('rating', 'created_at')
     search_fields = ('user__username', 'product__name', 'comment')
     readonly_fields = ('created_at',)
+    ordering = ('-created_at',)
+    
+    def rating_stars(self, obj):
+        return "⭐" * obj.rating
     
