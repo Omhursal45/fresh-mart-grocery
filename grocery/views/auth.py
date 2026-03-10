@@ -12,7 +12,7 @@ def signup_view(request):
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             login(request, user)
-            return redirect('home')
+            return redirect('login')
     else:
         form = UserCreationForm()
     return render(request, 'grocery/signup.html', {'form': form})
